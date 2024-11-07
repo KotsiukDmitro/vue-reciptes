@@ -1,4 +1,5 @@
 export const ROUTES_PATHS = {
     HOME: '/',
-    CATEGORIES: '/categories'
+    CATEGORIES: '/categories',
+    RECIPE: '/recipes/:id'
 }

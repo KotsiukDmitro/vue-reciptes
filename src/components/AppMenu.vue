@@ -10,7 +10,7 @@ const isPathActive = (path) => {
   return route.path === path;
 };
 
-onMounted(isPathActive);
+onMounted(()=>isPathActive);
 </script>
 
 <template>
@@ -26,13 +26,19 @@ onMounted(isPathActive);
     <el-menu :router="true" class="el-menu-vertical-demo !border-none">
       <el-menu-item
         :index="ROUTES_PATHS.HOME"
-        :class="['!text-[#4d0690]', isPathActive(ROUTES_PATHS.HOME) && '!text-[#FF5A79]']"
+        :class="[
+          '!text-[#4d0690]',
+          isPathActive(ROUTES_PATHS.HOME) && '!text-[#FF5A79]',
+        ]"
       >
         <el-icon class="w-6"><Food /></el-icon>
       </el-menu-item>
       <el-menu-item
         :index="ROUTES_PATHS.CATEGORIES"
-         :class="['!text-[#4d0690]', isPathActive(ROUTES_PATHS.CATEGORIES) && '!text-[#FF5A79]']"
+        :class="[
+          '!text-[#4d0690]',
+          isPathActive(ROUTES_PATHS.CATEGORIES) && '!text-[#FF5A79]',
+        ]"
       >
         <el-icon class="w-6"><Dish /></el-icon>
       </el-menu-item>
