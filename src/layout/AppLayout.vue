@@ -22,6 +22,3 @@ import AppMenu from "@/components/AppMenu.vue";
     </main>
   </div>
 </template>
-
-<style scoped>
-</style>

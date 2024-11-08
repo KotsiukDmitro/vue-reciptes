@@ -14,7 +14,7 @@ onMounted(()=>isPathActive);
 </script>
 
 <template>
-  <div class="h-screen border-r border-[#dcdfe6] pt-5 py-1.5">
+  <div class="min-h-screen h-full border-r border-[#dcdfe6] pt-5 py-1.5 fixed">
     <div class="flex justify-center">
       <img
         class="w-12 py-4 pb-4 border-b border-[#dcdfe6]"
@@ -45,8 +45,3 @@ onMounted(()=>isPathActive);
     </el-menu>
   </div>
 </template>
-
-
-
-<style scoped>
-</style>

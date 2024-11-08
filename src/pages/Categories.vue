@@ -1,8 +1,6 @@
 <script setup>
-
 import AppButton from "@/components/AppButton.vue";
 import AppLayout from "@/layout/AppLayout.vue";
-
 
 </script>
 

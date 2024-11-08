@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
-import { RecipeService } from "@/services";
+import { RecipeService, CommonService } from "@/services";
 import { useMainStore } from "@/stores/main";
 import AppButton from "@/components/AppButton.vue";
 import AppLayout from "@/layout/AppLayout.vue";
@@ -14,7 +14,7 @@ const isCreatingMode = ref(true);
 const mainStore = useMainStore();
 const areas = computed(() => mainStore.areas);
 const categories = computed(() => mainStore.categories);
-const ingredients = computed(() => mainStore.ingredients);
+const recipeIngredients = ref([CommonService.getEmptyIngredient()]);
 
 const fetchRecipe = async () => {
   try {
@@ -27,9 +27,32 @@ const fetchRecipe = async () => {
   }
 };
 
-onMounted(() => {
+const normalizeRecipeIngredients = () => {
+  const normalizeIngredients = [];
+  for (let i = 1; i <= 20; i++) {
+    if (recipe.value[`strIngredient${i}`]) {
+      const ingredient = {
+        title: recipe.value[`strIngredient${i}`],
+        measure: recipe.value[`strMeasure${i}`],
+      };
+      normalizeIngredients.push(ingredient);
+    }
+  }
+  recipeIngredients.value = normalizeIngredients;
+};
+
+const addIngredient = ()=> {
+  recipeIngredients.value.push(CommonService.getEmptyIngredient())
+}
+
+const removeIngredient = (index)=> {
+  recipeIngredients.value.splice(index, 1)
+}
+
+onMounted(async () => {
   if (parseInt(recipeId)) {
-    fetchRecipe();
+    await fetchRecipe();
+    normalizeRecipeIngredients();
   }
 });
 </script>
@@ -79,9 +102,37 @@ onMounted(() => {
             </el-select>
           </div>
         </div>
+        
+        <div class="mb-10">
+          <div class="pb-5 text-2xl font-bold text-[#4d0690]">Ingredients</div>
+          <div
+            v-for="(ingredient, index) in recipeIngredients"
+            :key="`${ingredient}-${index}`"
+            class="flex mb-4 items-end"
+          >
+           <div class="flex-auto w-20 mx-2 mb-2">
+            {{ index + 1 }}
+           </div>
+           <div class="flex-auto w-1/2 mx-2">
+            <div class="text-xl pb-1">Measure</div>
+            <el-input v-model="recipeIngredients[index].measure" placeholder="Measure" />
+
+           </div>
+           <div class="flex-auto w-1/2 mx-2">
+            <div class="text-xl pb-1">Title</div>
+            <el-input v-model="recipeIngredients[index].title" placeholder="Title" />
+
+           </div>
+           <div class="flex-auto w-20 mx-2 mb-1 hover:scale-110">
+            <AppButton @click="()=> removeIngredient(index)" circle icon="Delete"/>
+           </div>
+          </div>
+          <AppButton text="Add Ingredient" @click="addIngredient"/>
+        </div>
+
         <div class="flex mb-4">
           <div class="flex-auto w-1/2 mx-2">
-            <div class="text-xl pb-1">Ingredients</div>
+            <div class="text-xl pb-1">Instructions</div>
             <el-input
               v-model="recipeUpdated.strInstructions"
               :autosize="{ minRows: 2, maxRows: 5 }"
